@@ -19,15 +19,14 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app
 
-      - name: Build Archive
+      - name: Package IPA manually
         run: |
-          xcodebuild -scheme CashBox \
-          -sdk iphoneos \
-          -configuration Release \
-          archive -archivePath $PWD/build/CashBox.xcarchive \
-          CODE_SIGNING_ALLOWED=NO
+          mkdir -p build/ipa/Payload
+          cp -r build/CashBox.xcarchive/Products/Applications/CashBox.app build/ipa/Payload/
+          cd build/ipa
+          zip -r CashBox.ipa Payload
 
       - uses: actions/upload-artifact@v4
         with:
-          name: CashBox-xcarchive
-          path: build/CashBox.xcarchive
+          name: CashBox-IPA
+          path: build/ipa/CashBox.ipa
