@@ -27,7 +27,7 @@ jobs:
           archive -archivePath $PWD/build/CashBox.xcarchive \
           CODE_SIGNING_ALLOWED=NO
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: CashBox-xcarchive
           path: build/CashBox.xcarchive
