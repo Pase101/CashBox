@@ -3,7 +3,7 @@ import UserNotifications
 
 struct ContentView: View {
     @State private var isRunning = false
-    @State private var orderNumber = 3483
+    @AppStorage("orderNumber") private var orderNumber = 3483
 
     var body: some View {
         VStack(spacing: 30) {
@@ -11,7 +11,7 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold()
 
-            Text("Sales Simulator")
+            Text("Sales Notifications")
                 .foregroundColor(.gray)
 
             Button(action: toggle) {
@@ -32,33 +32,40 @@ struct ContentView: View {
     func toggle() {
         isRunning.toggle()
         if isRunning {
-            scheduleNext()
+            scheduleAll()
+        } else {
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         }
     }
 
-    func scheduleNext() {
-        guard isRunning else { return }
+    func scheduleAll() {
+        // iOS allows max 64 pending notifications
+        // We schedule 60 of them all at once with increasing delays
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 
-        let delay = Double.random(in: 20...120)
-        let amount = Double.random(in: 20...150)
-        orderNumber += 1
+        var currentDelay: Double = 0
+        var currentOrder = orderNumber
 
-        let content = UNMutableNotificationContent()
-        content.title = "New Order #\(orderNumber)"
-        content.subtitle = "CashBox Online Store"
-        content.body = String(format: "$%.2f – 1 Item", amount)
-        content.sound = .default
+        for _ in 0..<60 {
+            let gap = Double.random(in: 20...120)
+            currentDelay += gap
+            currentOrder += 1
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString,
-                                            content: content,
-                                            trigger: trigger)
+            let amount = Double.random(in: 20...150)
 
-        UNUserNotificationCenter.current().add(request)
+            let content = UNMutableNotificationContent()
+            content.title = "New Order #\(currentOrder)"
+            content.subtitle = "CashBox Online Store"
+            content.body = String(format: "$%.2f – 1 Item", amount)
+            content.sound = .default
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            scheduleNext()
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: currentDelay, repeats: false)
+            let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                                content: content,
+                                                trigger: trigger)
+            UNUserNotificationCenter.current().add(request)
         }
-    }
 
+        orderNumber = currentOrder
+    }
 }
