@@ -31,18 +31,4 @@ jobs:
         with:
           name: CashBox-xcarchive
           path: build/CashBox.xcarchive
-```
 
-Notice I removed the export/IPA step and just upload the `.xcarchive` — that avoids the signing wall entirely, which is the fallback ChatGPT already recommended.
-
-**Your final folder structure on Windows becomes:**
-```
-CashBox/
- ├── project.yml              ← new, replaces .xcodeproj
- ├── CashBox/
- │    ├── CashBoxApp.swift
- │    ├── ContentView.swift
- │    └── AppDelegate.swift
- └── .github/
-      └── workflows/
-           └── ios.yml
