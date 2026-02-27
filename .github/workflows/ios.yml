@@ -31,4 +31,3 @@ jobs:
         with:
           name: CashBox-xcarchive
           path: build/CashBox.xcarchive
-
