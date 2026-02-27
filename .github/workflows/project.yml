@@ -1,0 +1,16 @@
+name: CashBox
+options:
+  bundleIdPrefix: com.demo
+  deploymentTarget:
+    iOS: "16.0"
+
+targets:
+  CashBox:
+    type: application
+    platform: iOS
+    sources:
+      - CashBox
+    info:
+      path: CashBox/Info.plist
+      properties:
+        UILaunchScreen: {}
