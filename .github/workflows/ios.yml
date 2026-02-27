@@ -1,1 +1,48 @@
+name: Build iOS
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate .xcodeproj
+        run: xcodegen generate
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build Archive
+        run: |
+          xcodebuild -scheme CashBox \
+          -sdk iphoneos \
+          -configuration Release \
+          archive -archivePath $PWD/build/CashBox.xcarchive \
+          CODE_SIGNING_ALLOWED=NO
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: CashBox-xcarchive
+          path: build/CashBox.xcarchive
+```
+
+Notice I removed the export/IPA step and just upload the `.xcarchive` — that avoids the signing wall entirely, which is the fallback ChatGPT already recommended.
+
+**Your final folder structure on Windows becomes:**
+```
+CashBox/
+ ├── project.yml              ← new, replaces .xcodeproj
+ ├── CashBox/
+ │    ├── CashBoxApp.swift
+ │    ├── ContentView.swift
+ │    └── AppDelegate.swift
+ └── .github/
+      └── workflows/
+           └── ios.yml
