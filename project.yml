@@ -10,6 +10,7 @@ targets:
     platform: iOS
     sources:
       - CashBox
+    assets: CashBox/Assets.xcassets
     info:
       path: CashBox/Info.plist
       properties:
