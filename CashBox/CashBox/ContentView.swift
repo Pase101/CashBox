@@ -47,7 +47,7 @@ struct ContentView: View {
         var currentOrder = orderNumber
 
         for _ in 0..<60 {
-            let gap = Double.random(in: 20...200)
+            let gap = Double.random(in: 20...250)
             currentDelay += gap
             currentOrder += 1
 
@@ -69,3 +69,4 @@ struct ContentView: View {
         orderNumber = currentOrder
     }
 }
+
