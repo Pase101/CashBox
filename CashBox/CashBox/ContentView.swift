@@ -45,7 +45,7 @@ struct ContentView: View {
 
         let content = UNMutableNotificationContent()
         content.title = "New Order #\(orderNumber)"
-        content.subtitle = "CashBox Online Store (Simulation)"
+        content.subtitle = "CashBox Online Store"
         content.body = String(format: "$%.2f – 1 Item", amount)
         content.sound = .default
 
@@ -60,4 +60,5 @@ struct ContentView: View {
             scheduleNext()
         }
     }
+
 }
